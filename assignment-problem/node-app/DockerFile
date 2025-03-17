@@ -1,0 +1,14 @@
+#Creating image for node app
+FROM node
+
+WORKDIR /node_app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
