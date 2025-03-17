@@ -1,0 +1,9 @@
+#------------------------------------------------------------
+# Creating image for python app
+FROM python:3
+
+WORKDIR /python_app
+
+COPY . .
+
+CMD ["python", "bmi.py"]
