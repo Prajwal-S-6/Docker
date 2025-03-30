@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-feedback-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+  - ReadWriteOnce
+  volumeName: my-feedback-pv
+  resources:
+    requests:
+      storage: 1Gi

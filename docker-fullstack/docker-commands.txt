@@ -1,0 +1,21 @@
+Create network for the containers
+docker network create goals-app-net
+
+Build and run docker image for mongo
+>> docker run --name mongo-db --env-file ./backend/.env -d --rm --network goals-app-net -v my-db-data:/data/db mongo
+
+Build docker image for backend
+>> docker build -t node-backend:v1 ./backend (path where Dockerfile exists for this image)
+
+Running backend container with network, volumes, bindmount
+>> docker run -p 80:80 --name backend-app --rm -d -v logs:/multi-app/backend/logs -v "%cd%":/multi-app/backend -v /multi-app/backend/node_modules --network goals-app-net node-backend:v1
+OR from backend path
+>> docker run -p 80:80 --name backend-app -d -v logs:/multi-app/backend/logs -v "%cd%":/multi-app/backend -v /multi-app/backend/node_modules --network goals-app-net node-backend:v1
+
+Build docker image for frontend
+>> docker build -t react-frontend:v1 ./frontend (path where Dockerfile exists for this image)
+
+Running backend container with network, volumes, bindmount
+>> docker run -p 3200:3000 --name frontend-app --rm -d -v "%cd%":/multi-app/frontend -v /multi-app/frontend/node_modules --network goals-app-net -it react-frontend:v1
+OR from frontend path
+>> docker run -p 3200:3000 --name frontend-app --rm -d -v "%cd%":/multi-app/frontend -v /multi-app/frontend/node_modules --network goals-app-net -it react-frontend:v1
