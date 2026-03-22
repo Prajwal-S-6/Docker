@@ -1,0 +1,14 @@
+FROM node:latest
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 80
+
+CMD ["node",  "server.js"]
+
+#docker build -t node:1.0.0 --file DockerfileNode .
+#docker run -p 90:80 node:1.0.0
