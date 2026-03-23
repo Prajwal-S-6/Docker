@@ -1,4 +1,11 @@
-FROM ubuntu:latest
-LABEL authors="Prajwal S"
+FROM node
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR frontendApp
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "start"]
