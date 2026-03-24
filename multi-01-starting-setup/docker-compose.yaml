@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo-db
+    env_file:
+      - .env
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - multi-app
+
+  backend:
+#    build: ./backend
+     build:
+       context: ./backend
+       dockerfile: Dockerfile
+     image: backend:v1
+     container_name: backend
+     ports:
+       - "8080:80"
+     environment:
+       - MONGODB_USERNAME=praj
+     volumes:
+       - logs:/backendApp/logs
+       - ./backend:/backendApp
+       - /backendApp/node_modules
+     networks:
+       - multi-app
+     depends_on:
+       - mongodb
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend:v1
+    container_name: frontendApp
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/frontendApp/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  mongo-data:
+  logs:
+
+networks:
+  multi-app:
+
