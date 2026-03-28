@@ -74,9 +74,7 @@ services:
       - my-network
   worker:
     container_name: worker
-    image: workerimg:v1
-    ports:
-      - "9000:9000"
+    image: kodekloud/examplevotingapp_worker:v1
     networks:
       - my-network
     depends_on:
@@ -84,18 +82,18 @@ services:
       - postgres
   voting-app:
     container_name: votingApp
-    image: votingimg:v1
+    image: kodekloud/examplevotingapp_vote:v1
     ports:
-      - "8080:8080"
+      - "8080:80"
     networks:
       - my-network
     depends_on:
       - redis
   result-app:
     container_name: resultApp
-    image: resultimg:v1
+    image: kodekloud/examplevotingapp_result:v1
     ports:
-      - "80:80"
+      - "8090:80"
     networks:
       - my-network
     depends_on:
