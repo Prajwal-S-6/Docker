@@ -52,3 +52,56 @@ volumes:
 networks:
   multi-app:
 
+---
+
+version: "3.8"
+services:
+  redis:
+    container_name: redisdb
+    image: redis
+    volumes:
+      - redisData:/redis/data
+    networks:
+      - my-network
+  postgres:
+    container_name: postgresdb
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgresData:/postgres/data
+    networks:
+      - my-network
+  worker:
+    container_name: worker
+    image: workerimg:v1
+    ports:
+      - "9000:9000"
+    networks:
+      - my-network
+    depends_on:
+      - redis
+      - postgres
+  voting-app:
+    container_name: votingApp
+    image: votingimg:v1
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+    depends_on:
+      - redis
+  result-app:
+    container_name: resultApp
+    image: resultimg:v1
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+    depends_on:
+      - postgres
+
+volumes:
+  redisData:
+networks:
+  my-network:
